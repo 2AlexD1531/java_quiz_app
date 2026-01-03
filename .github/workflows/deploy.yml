@@ -1,54 +1,43 @@
-name: Deploy Java Quiz App
+name: CI-CD
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  test-and-build:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
-      # 1. Получить код
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-      
-      # 2. Настроить Java
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+
+      - name: Docker Compose build
+        run: docker compose build
+
+      - name: Copy .env on server
+        uses: appleboy/ssh-action@v1
         with:
-          java-version: '21'
-          distribution: 'temurin'
-      
-      # 3. Кэш Maven dependencies
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/quiz
+            cat > .env <<EOF
+            DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            OPENROUTER_KEY=${{ secrets.OPENROUTER_KEY }}
+            CORS_ORIGINS=https://yourdomain.com
+            EOF
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v1
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      
-      # 4. Запустить тесты
-      - name: Run tests
-        run: cd backend && mvn test
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          OPENROUTER_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-      
-      # 5. Собрать JAR
-      - name: Build with Maven
-        run: cd backend && mvn clean package -DskipTests
-      
-      # 6. Собрать Docker образ
-      - name: Build Docker image
-        run: docker-compose build
-      
-      # 7. Залить образ в Docker Hub (опционально)
-      - name: Push to Docker Hub
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker tag java-quiz-app:latest ${{ secrets.DOCKER_USERNAME }}/java-quiz-app:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/java-quiz-app:latest
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/quiz
+            git pull
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker system prune -f
