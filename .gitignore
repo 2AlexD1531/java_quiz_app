@@ -1,0 +1,17 @@
+# === Java / Spring (backend) ===
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.class
+backend/.idea/
+backend/*.iml
+backend/logs/
+
+# === OS & IDE ===
+.DS_Store
+.vscode/
+*.log
+
+# === Docker & secrets ===
+.env
+*.env.prod
