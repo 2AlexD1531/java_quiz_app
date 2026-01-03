@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8080';
+const API_BASE = '';
 
 class QuizAPI {
     static token = localStorage.getItem('authToken');
