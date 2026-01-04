@@ -26,7 +26,7 @@ jobs:
             DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             OPENROUTER_KEY=${{ secrets.OPENROUTER_KEY }}
-            CORS_ORIGINS=https://yourdomain.com
+            CORS_ORIGINS=https://185.250.44.34
             EOF
 
       - name: Deploy
