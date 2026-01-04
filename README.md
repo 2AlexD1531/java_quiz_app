@@ -28,7 +28,7 @@ docker compose up -d
 ```
 
 
-Через 30 секунд открываем в браузере: 👉 http://localhost — фронт
+В браузере: 👉 http://localhost — фронт
 
 ---
 
