@@ -30,6 +30,7 @@ docker compose up -d
 
 В браузере: 👉 http://localhost — фронт
 
+
 ---
 
 ## 📋 Переменные окружения
