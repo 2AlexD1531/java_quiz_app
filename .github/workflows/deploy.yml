@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/quiz
+            cd ~/java_quiz_app
             cat > .env <<EOF
             DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/quiz
+            cd ~/java_quiz_app
             git pull
             docker compose pull
             docker compose up -d --remove-orphans
