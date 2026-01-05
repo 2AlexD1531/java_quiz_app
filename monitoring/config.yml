@@ -18,7 +18,7 @@ endpoints:
         send-on-resolved: true
 
   - name: "API Health Check"
-    url: "http://${BASE_URL}/api/health"  # Уберите :8080, т.к. Nginx проксирует
+    url: "http://backend:8080/api/health"  # Уберите :8080, т.к. Nginx проксирует
     interval: 5m
     conditions:
       - "[STATUS] == 200"
@@ -33,7 +33,7 @@ endpoints:
         send-on-resolved: true
 
   - name: "Database Connection"
-    url: "tcp://${DB_HOST}:${DB_PORT}"
+    url: "jdbc:mysql://${DB_HOST}:${DB_PORT}"
     interval: 2m
     conditions:
       - "[CONNECTED] == true"
@@ -42,6 +42,14 @@ endpoints:
         enabled: true
         description: "❌ База данных недоступна"
         send-on-resolved: true
+
+  - name: "Nginx Health"
+    url: "http://${BASE_URL}/nginx-health"
+    interval: 30s
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY] contains nginx ok"
+
 
 alerting:
   telegram:
