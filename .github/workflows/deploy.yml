@@ -34,9 +34,14 @@ jobs:
             CORS_ORIGINS=https://yourdomain.com
             AI_API_URL=${{ secrets.AI_API_URL }}
             AI_API_MODEL=${{ secrets.AI_API_MODEL }}
+            TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
+            TELEGRAM_CHAT=${{ secrets.TELEGRAM_CHAT }}
+            BASE_URL=${{ secrets.BASE_URL }}
+            
+            
             EOF
 
-      - name: Deploy
+      - name: Deploy main stack
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
@@ -48,3 +53,13 @@ jobs:
             docker compose pull
             docker compose up -d --remove-orphans
             docker system prune -f
+            
+            - name: Deploy monitoring stack
+                   uses: appleboy/ssh-action@v1
+                   with:
+                     host: ${{ secrets.HOST }}
+                     username: ${{ secrets.USER }}
+                     key: ${{ secrets.SSH_KEY }}
+                     script: |
+                       cd ~/java_quiz_app
+                       docker compose -f monitoring/docker-compose.yml up -d

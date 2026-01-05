@@ -1,0 +1,31 @@
+storage:
+  type: sqlite
+  path: /data/gatus.db
+
+endpoints:
+  - name: "Site HTTP"
+    url: "https://${BASE_URL}"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: telegram
+        enabled: true
+        description: "❌ сайт лёг"
+
+  - name: "API 8080"
+    url: "http://${BASE_URL}:8080/api/health"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: telegram
+        enabled: true
+        description: "❌ API недоступен"
+
+alerting:
+  telegram:
+    token: "${TELEGRAM_TOKEN}"
+    id: "${TELEGRAM_CHAT}"
+    default-alert:
+      send-on-resolved: true
