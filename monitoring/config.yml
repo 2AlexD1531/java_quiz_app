@@ -1,31 +1,46 @@
+# config.yml (исправленная версия)
 storage:
   type: sqlite
   path: /data/gatus.db
 
-endpoints:
+services:
   - name: "Site HTTP"
-    url: "http://${BASE_URL}"
+    url: "https://${BASE_URL}"  # Обратите внимание на https
     interval: 5m
     conditions:
       - "[STATUS] == 200"
+      - "[BODY] contains какой-то_уникальный_текст"  # Добавьте для надежности
     alerts:
       - type: telegram
         enabled: true
-        description: "❌ сайт лёг"
+        description: "❌ Сайт недоступен"
+        send-on-resolved: true
 
-  - name: "API 8080"
-    url: "http://${BASE_URL}:8080/api/health"
+  - name: "API Health Check"
+    url: "https://${BASE_URL}:8080/api/health"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
+      - "[BODY] contains healthy"  # Проверяем конкретное содержание
+      - "[RESPONSE_TIME] < 3000"  # Максимум 3 секунды
     alerts:
       - type: telegram
         enabled: true
         description: "❌ API недоступен"
+        send-on-resolved: true
+
+  - name: "Database Connection"
+    url: "tcp://${DB_HOST}:${DB_PORT}"
+    interval: 2m
+    conditions:
+      - "[CONNECTED] == true"
+    alerts:
+      - type: telegram
+        enabled: true
+        description: "❌ База данных недоступна"
+        send-on-resolved: true
 
 alerting:
   telegram:
     token: "${TELEGRAM_TOKEN}"
     id: "${TELEGRAM_CHAT}"
-    default-alert:
-      send-on-resolved: true
