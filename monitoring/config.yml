@@ -14,7 +14,7 @@ endpoints:
         description: "❌ сайт лёг"
 
   - name: "API 8080"
-    url: "http://localhost:8080/api/health"
+    url: "http://${BASE_URL}:8080/api/health"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
