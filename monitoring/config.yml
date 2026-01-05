@@ -5,7 +5,7 @@ storage:
 
 services:
   - name: "Site HTTP"
-    url: "https://${BASE_URL}"  # Обратите внимание на https
+    url: "http://${BASE_URL}"  # Обратите внимание на https
     interval: 5m
     conditions:
       - "[STATUS] == 200"
@@ -17,7 +17,7 @@ services:
         send-on-resolved: true
 
   - name: "API Health Check"
-    url: "https://${BASE_URL}:8080/api/health"
+    url: "https://${BASE_URL}/api/health"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
