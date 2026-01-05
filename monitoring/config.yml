@@ -4,7 +4,7 @@ storage:
 
 endpoints:
   - name: "Site HTTP"
-    url: "https://${BASE_URL}"
+    url: "http://${BASE_URL}"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
@@ -14,7 +14,7 @@ endpoints:
         description: "❌ сайт лёг"
 
   - name: "API 8080"
-    url: "http://${BASE_URL}:8080/api/health"
+    url: "http://localhost:8080/api/health"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
