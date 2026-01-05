@@ -32,9 +32,10 @@ endpoints:
         description: "❌ API недоступен"
         send-on-resolved: true
 
-  - name: "Database Connection"
-    url: "tcp://${DB_HOST}:${DB_PORT}"
-    interval: 2m
+  - name: "Database TCP"
+    type: tcp                 # ← ОБЯЗАТЕЛЬНО указать тип!
+    url: "db:3306"            # хост:порт
+    interval: 30s
     conditions:
       - "[CONNECTED] == true"
     alerts:
