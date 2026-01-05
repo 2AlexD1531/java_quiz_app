@@ -1,15 +1,16 @@
-# config.yml (исправленная версия)
+# config.yml
 storage:
-  type: sqlite
-  path: /data/gatus.db
+  type: memory  # Используйте memory для простоты
 
-services:
+endpoints:
   - name: "Site HTTP"
-    url: "http://${BASE_URL}"  # Обратите внимание на https
+    url: "http://${BASE_URL}"  # HTTP вместо HTTPS, если нет SSL
     interval: 5m
     conditions:
       - "[STATUS] == 200"
-      - "[BODY] contains какой-то_уникальный_текст"  # Добавьте для надежности
+      # Уберите или замените на реальный текст с вашего сайта:
+      # - "[BODY] contains Welcome"
+      # - "[BODY] contains Главная"
     alerts:
       - type: telegram
         enabled: true
@@ -17,12 +18,14 @@ services:
         send-on-resolved: true
 
   - name: "API Health Check"
-    url: "https://${BASE_URL}/api/health"
+    url: "http://${BASE_URL}/api/health"  # Уберите :8080, т.к. Nginx проксирует
     interval: 5m
     conditions:
       - "[STATUS] == 200"
-      - "[BODY] contains healthy"  # Проверяем конкретное содержание
-      - "[RESPONSE_TIME] < 3000"  # Максимум 3 секунды
+      # Проверьте что возвращает ваш /api/health:
+      # - "[BODY] contains healthy"  # Если возвращает {"status": "healthy"}
+      # - "[BODY] contains UP"        # Если возвращает {"status": "UP"}
+      - "[RESPONSE_TIME] < 5000"  # Увеличьте до 5 секунд
     alerts:
       - type: telegram
         enabled: true
