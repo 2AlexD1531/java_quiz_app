@@ -3,12 +3,12 @@ services:
   gatus:
     image: twinproduction/gatus:v5.8.0
     container_name: gatus
-    command: ["--config", "/config/config.yml"]  # Важно!
+    # command: ["--config", "/config/config.yml"]  # Важно!
     networks:
       - java_quiz_app_quiz_net
     env_file: ../.env
-    # environment:  # Можно удалить, т.к. есть env_file
-    #   - GATUS_CONFIG_PATH=/config/config.yml
+    environment:
+     - GATUS_CONFIG_PATH=/config/config.yml
     volumes:
       - ./config.yml:/config/config.yml
     ports:
