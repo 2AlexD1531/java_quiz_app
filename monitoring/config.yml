@@ -33,7 +33,7 @@ endpoints:
         send-on-resolved: true
 
   - name: "Database Connection"
-    url: "jdbc:mysql://${DB_HOST}:${DB_PORT}"
+    url: "tcp://${DB_HOST}:${DB_PORT}"
     interval: 2m
     conditions:
       - "[CONNECTED] == true"
