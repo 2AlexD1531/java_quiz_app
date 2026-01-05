@@ -54,12 +54,12 @@ jobs:
             docker compose up -d --remove-orphans
             docker system prune -f
             
-            - name: Deploy monitoring stack
-                   uses: appleboy/ssh-action@v1
-                   with:
-                     host: ${{ secrets.HOST }}
-                     username: ${{ secrets.USER }}
-                     key: ${{ secrets.SSH_KEY }}
-                     script: |
-                       cd ~/java_quiz_app
-                       docker compose -f monitoring/docker-compose.yml up -d
+      - name: Deploy monitoring stack
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/java_quiz_app
+            docker compose -f monitoring/docker-compose.yml up -d
