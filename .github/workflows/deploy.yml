@@ -53,7 +53,7 @@ jobs:
             docker compose pull
             docker compose up -d --remove-orphans
             docker system prune -f
-            
+
       - name: Deploy monitoring stack
         uses: appleboy/ssh-action@v1
         with:
