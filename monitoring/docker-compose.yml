@@ -6,7 +6,7 @@ services:
     command: ["--config", "/config/config.yml"]  # Важно!
     networks:
       - java_quiz_app_quiz_net
-    env_file: ../.env
+
 
     environment:
 
