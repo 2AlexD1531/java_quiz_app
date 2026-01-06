@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,24 @@ public class GlobalExceptionHandler {
         response.put("status", HttpStatus.BAD_REQUEST.toString());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(NoHandlerFoundException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "Not Found");
+        response.put("message", "The requested resource was not found");
+        response.put("path", ex.getRequestURL());
+        response.put("status", HttpStatus.NOT_FOUND.toString());
+
+
+        String path = ex.getRequestURL();
+        if (path.contains(".php") || path.contains("/wp-") || path.contains("/admin") || path.contains("/shell")) {
+            System.err.println("⚠️ Scanner detected: " + path);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 
 
 }
