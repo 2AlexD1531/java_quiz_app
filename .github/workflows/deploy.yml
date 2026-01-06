@@ -65,4 +65,6 @@ jobs:
             # Сначала убедитесь, что сеть существует
             # Затем запускайте мониторинг
             cd monitoring
+            docker compose up -d --remove-orphans
+            docker system prune -f
             docker compose up -d

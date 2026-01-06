@@ -1,4 +1,4 @@
-version: "3.8"
+
 services:
   gatus:
     image: twinproduction/gatus:v5.8.0
