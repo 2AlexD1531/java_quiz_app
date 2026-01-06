@@ -8,7 +8,7 @@ services:
       - java_quiz_app_quiz_net
     env_file: ../.env
     environment:
-     - GATUS_CONFIG_PATH=/config/config.yml
+     - GATUS_CONFIG_PATH=./config.yml
     volumes:
       - ./config.yml:/config/config.yml
     ports:
