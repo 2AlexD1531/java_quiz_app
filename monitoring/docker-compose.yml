@@ -3,30 +3,20 @@ services:
   gatus:
     image: twinproduction/gatus:v5.8.0
     container_name: gatus
-    command: ["--config", "/config/config.yml"]  # Убедитесь, что не закомментировано
-
-    # Подключаемся к существующей сети
+    # command: ["--config", "/config/config.yml"]  # Важно!
     networks:
-      default:
-        external:
-          name: java_quiz_app_quiz_net
+      - java_quiz_app_quiz_net
+    env_file: ../.env
 
-    # Все переменные напрямую
     environment:
-      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
-      TELEGRAM_CHAT: ${TELEGRAM_CHAT}
-      BASE_URL: ${BASE_URL:-http://localhost}
-      DB_HOST: quiz_mysql  # Используем имя контейнера
-      DB_PORT: "3306"
-
+      - GATUS_CONFIG_PATH=./config/config.yml
+      - BASE_URL=${BASE_URL}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_CHAT=${TELEGRAM_CHAT}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
     volumes:
-      - ./config.yml:/config/config.yml:ro
+      - ./config.yml:/config/config.yml
     ports:
       - 127.0.0.1:8085:8080
     restart: unless-stopped
-
-# УДАЛИТЕ секцию networks, если она есть
-# networks:
-#   quiz_net:
-#     external: true
-#     name: java_quiz_app_quiz_net
