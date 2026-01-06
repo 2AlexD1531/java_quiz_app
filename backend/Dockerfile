@@ -8,7 +8,6 @@ RUN mvn clean package -DskipTests
 
 # Этап запуска
 FROM eclipse-temurin:21-jre-alpine
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=build /app/target/javaquiz-1.0.0.jar app.jar
 
