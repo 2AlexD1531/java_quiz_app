@@ -18,6 +18,10 @@ endpoints:
   - name: "Quiz App Backend API"
     url: "http://quiz_backend:8080/api/health"
     interval: 1m
+    headers:
+      Host: localhost  # Добавляем правильный заголовок Host
+      User-Agent: Gatus/1.0
+      Accept: "*/*"
     conditions:
       - "[STATUS] == 200"
       - "[RESPONSE_TIME] < 5000"
@@ -45,10 +49,7 @@ endpoints:
     interval: 30s
     conditions:
       - "[STATUS] == 200"
-      # Если хотите проверять body, используйте правильный синтаксис:
-      # - "[BODY] == nginx ok"  # ТОЧНОЕ совпадение
-      # или если nginx возвращает "nginx ok\n":
-      # - "[BODY] == nginx ok\n"
+
 
 alerting:
   telegram:
