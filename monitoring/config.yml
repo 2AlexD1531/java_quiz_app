@@ -32,17 +32,6 @@ endpoints:
         description: "❌ API недоступен"
         send-on-resolved: true
 
-  - name: "Database TCP"
-    type: tcp
-    url: "tcp://${DB_HOST}:${DB_PORT}"
-    interval: 30s
-    conditions:
-      - "[CONNECTED] == true"
-    alerts:
-      - type: telegram
-        enabled: true
-        description: "❌ База данных недоступна"
-        send-on-resolved: true
 
   - name: "Nginx Health"
     url: "http://${BASE_URL}/nginx-health"
