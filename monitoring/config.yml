@@ -1,40 +1,35 @@
 # config.yml
+
 storage:
-  type: memory  # Используйте memory для простоты
+  type: memory
 
 endpoints:
-  - name: "Site HTTP"
-    url: "http://${BASE_URL}"  # HTTP вместо HTTPS, если нет SSL
-    interval: 5m
+  - name: "Quiz App Frontend"
+    url: "http://quiz_frontend"
+    interval: 1m
     conditions:
       - "[STATUS] == 200"
-      # Уберите или замените на реальный текст с вашего сайта:
-      # - "[BODY] contains Welcome"
-      # - "[BODY] contains Главная"
     alerts:
       - type: telegram
         enabled: true
-        description: "❌ Сайт недоступен"
+        description: "❌ Frontend недоступен"
         send-on-resolved: true
 
-  - name: "API Health Check"
-    url: "http://backend:8080/api/health"  # Уберите :8080, т.к. Nginx проксирует
-    interval: 5m
+  - name: "Quiz App Backend API"
+    url: "http://quiz_backend:8080/api/health"
+    interval: 1m
     conditions:
       - "[STATUS] == 200"
-      # Проверьте что возвращает ваш /api/health:
-      # - "[BODY] contains healthy"  # Если возвращает {"status": "healthy"}
-      # - "[BODY] contains UP"        # Если возвращает {"status": "UP"}
-      - "[RESPONSE_TIME] < 5000"  # Увеличьте до 5 секунд
+      - "[RESPONSE_TIME] < 5000"
     alerts:
       - type: telegram
         enabled: true
-        description: "❌ API недоступен"
+        description: "❌ Backend API недоступен"
         send-on-resolved: true
 
-  - name: "Database TCP"
+  - name: "MySQL Database"
     type: tcp
-    url: "tcp://${DB_HOST}:${DB_PORT}"
+    url: "tcp://quiz_mysql:3306"
     interval: 30s
     conditions:
       - "[CONNECTED] == true"
@@ -44,13 +39,16 @@ endpoints:
         description: "❌ База данных недоступна"
         send-on-resolved: true
 
+  # УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
   - name: "Nginx Health"
-    url: "http://${BASE_URL}/nginx-health"
+    url: "http://quiz_frontend/nginx-health"
     interval: 30s
     conditions:
       - "[STATUS] == 200"
-      - "[BODY] contains nginx ok"
-
+      # Если хотите проверять body, используйте правильный синтаксис:
+      # - "[BODY] == nginx ok"  # ТОЧНОЕ совпадение
+      # или если nginx возвращает "nginx ok\n":
+      # - "[BODY] == nginx ok\n"
 
 alerting:
   telegram:
