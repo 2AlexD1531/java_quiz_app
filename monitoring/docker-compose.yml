@@ -7,7 +7,6 @@ services:
     networks:
       - quiz_net
     env_file: ../.env
-
     environment:
       - GATUS_CONFIG_PATH=./config/config.yml
       - BASE_URL=${BASE_URL}

@@ -34,7 +34,7 @@ endpoints:
 
   - name: "Database TCP"
     type: tcp
-    url: "tcp://quiz_mysql:3306"
+    url: "tcp://${DB_HOST}:${DB_PORT}"
     interval: 30s
     conditions:
       - "[CONNECTED] == true"
