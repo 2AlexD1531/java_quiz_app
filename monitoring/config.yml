@@ -33,8 +33,7 @@ endpoints:
         send-on-resolved: true
 
   - name: "Database TCP"
-    type: tcp                 # ← ОБЯЗАТЕЛЬНО указать тип!
-    url: "db:3306"            # хост:порт
+    url: "tcp://${DB_HOST}:${DB_PORT}"
     interval: 30s
     conditions:
       - "[CONNECTED] == true"
