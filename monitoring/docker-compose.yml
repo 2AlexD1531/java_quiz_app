@@ -5,7 +5,7 @@ services:
     container_name: gatus
     # command: ["--config", "/config/config.yml"]  # Важно!
     networks:
-      - java_quiz_app_quiz_net
+      - quiz_net
     env_file: ../.env
 
     volumes:
@@ -15,6 +15,6 @@ services:
     restart: unless-stopped
 
 networks:
-  java_quiz_app_quiz_net:
+  quiz_net:
     external: true
-    name: java_quiz_app_quiz_net
+    name: quiz_net
