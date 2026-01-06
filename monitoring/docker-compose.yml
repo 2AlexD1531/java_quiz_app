@@ -1,4 +1,4 @@
-
+version: "3.8"
 services:
   gatus:
     image: twinproduction/gatus:v5.8.0
@@ -6,6 +6,8 @@ services:
     # command: ["--config", "/config/config.yml"]  # Важно!
     networks:
       - java_quiz_app_quiz_net
+    env_file: ../.env
+
     environment:
       - BASE_URL=${BASE_URL}
       - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
