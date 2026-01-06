@@ -62,4 +62,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/java_quiz_app
-            docker compose -f monitoring/docker-compose.yml up -d
+            # Сначала убедитесь, что сеть существует
+            docker network inspect java_quiz_app_quiz_net || docker network create java_quiz_app_quiz_net
+            # Затем запускайте мониторинг
+            cd monitoring
+            docker compose up -d
