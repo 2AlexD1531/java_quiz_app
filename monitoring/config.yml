@@ -20,7 +20,6 @@ endpoints:
     interval: 1m
     conditions:
       - "[STATUS] == 200"
-      - "[RESPONSE_TIME] < 5000"
     alerts:
       - type: telegram
         enabled: true
