@@ -10,7 +10,6 @@ services:
     environment:
       - GATUS_CONFIG_PATH=./config/config.yml
       - BASE_URL=${BASE_URL}
-      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - TELEGRAM_CHAT=${TELEGRAM_CHAT}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
