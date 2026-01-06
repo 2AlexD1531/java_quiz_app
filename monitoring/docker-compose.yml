@@ -5,11 +5,9 @@ services:
     container_name: gatus
     command: ["--config", "/config/config.yml"]  # Важно!
     networks:
-      - java_quiz_app_quiz_net
-
+      - quiz_net
 
     environment:
-
       - BASE_URL=${BASE_URL}
       - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - TELEGRAM_CHAT=${TELEGRAM_CHAT}
