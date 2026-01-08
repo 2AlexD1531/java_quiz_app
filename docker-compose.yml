@@ -10,8 +10,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_HOST: '%'
-    ports:
-      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     #  - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -50,8 +48,6 @@ services:
       AI_API_MODEL: ${AI_API_MODEL}
       # Переопределение для безопасности
       SPRING_DATASOURCE_URL: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
-    ports:
-      - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
