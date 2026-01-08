@@ -16,7 +16,7 @@ endpoints:
         send-on-resolved: true
 
   - name: "Quiz App Backend API"
-    url: "http://quiz_backend:8080/api/health"
+    url: "http://quiz_backend/api/health"
     interval: 1m
     conditions:
       - "[STATUS] == 200"
