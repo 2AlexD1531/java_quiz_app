@@ -38,7 +38,7 @@ endpoints:
         description: "❌ База данных недоступна"
         send-on-resolved: true
 
-  #  УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
+  # УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
   - name: "Nginx Health"
     url: "http://quiz_frontend/nginx-health"
     interval: 30s
