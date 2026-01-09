@@ -20,6 +20,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.HOST_PORT }}
           script: |
             cd ~/java_quiz_app
             cat > .env <<EOF
@@ -47,6 +48,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.HOST_PORT }}
           script: |
             cd ~/java_quiz_app
             git pull origin main
@@ -60,6 +62,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.HOST_PORT }}
           script: |
             cd ~/java_quiz_app
             # Сначала убедитесь, что сеть существует
