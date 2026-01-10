@@ -6,7 +6,7 @@ debug: true
 
 endpoints:
   - name: "Quiz App Frontend"
-    url: "http://quiz_frontend"
+    url: "https://demo555.publicvm.com"
     interval: 1m
     conditions:
       - "[STATUS] == 200"
@@ -42,7 +42,7 @@ endpoints:
 
   # УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
   - name: "Nginx Health"
-    url: "http://frontend:433/nginx-health"
+    url: "https://demo555.publicvm.com/nginx-health"
     interval: 30s
     conditions:
       - "[STATUS] == 200"
