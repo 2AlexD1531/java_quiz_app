@@ -79,6 +79,8 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
       - ./logs/nginx:/var/log/nginx
+      - /etc/letsencrypt:/etc/letsencrypt:ro # for ssl sert
+      - /var/lib/letsencrypt:/var/lib/letsencrypt:ro
     depends_on:
       - backend
     networks:
