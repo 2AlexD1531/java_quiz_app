@@ -5,7 +5,7 @@ storage:
 
 endpoints:
   - name: "Quiz App Frontend"
-    url: "http://quiz_frontend"
+    url: "https://quiz_frontend"
     interval: 1m
     conditions:
       - "[STATUS] == 200"
@@ -40,7 +40,7 @@ endpoints:
 
   # 1УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
   - name: "Nginx Health"
-    url: "http://quiz_frontend/nginx-health"
+    url: "https://quiz_frontend/nginx-health"
     interval: 30s
     conditions:
       - "[STATUS] == 200"
