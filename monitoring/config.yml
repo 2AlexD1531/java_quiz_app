@@ -2,6 +2,7 @@
 
 storage:
   type: memory
+debug: true
 
 endpoints:
   - name: "Quiz App Frontend"
@@ -14,6 +15,7 @@ endpoints:
         enabled: true
         description: "❌ Frontend недоступен"
         send-on-resolved: true
+
 
   - name: "Quiz App Backend API"
     url: "http://quiz_backend/api/health"
