@@ -18,7 +18,7 @@ endpoints:
 
 
   - name: "Quiz App Backend API"
-    url: "http://quiz_backend/api/health"
+    url: "http://backend:8080/api/health"
     interval: 1m
     conditions:
       - "[STATUS] == 200"
@@ -42,7 +42,7 @@ endpoints:
 
   # УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
   - name: "Nginx Health"
-    url: "https://quiz_frontend/nginx-health"
+    url: "http://frontend/nginx-health"
     interval: 30s
     conditions:
       - "[STATUS] == 200"
