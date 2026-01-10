@@ -30,7 +30,7 @@ endpoints:
 
   - name: "MySQL Database"
     type: tcp
-    url: "tcp://quiz_mysql"
+    url: "tcp://db:3306"
     interval: 30s
     conditions:
       - "[CONNECTED] == true"
@@ -42,7 +42,7 @@ endpoints:
 
   # УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
   - name: "Nginx Health"
-    url: "http://frontend/nginx-health"
+    url: "http://frontend:433/nginx-health"
     interval: 30s
     conditions:
       - "[STATUS] == 200"
