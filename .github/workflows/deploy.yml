@@ -32,7 +32,7 @@ jobs:
             DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             OPENROUTER_KEY=${{ secrets.OPENROUTER_KEY }}
-            CORS_ORIGINS=https://yourdomain.com
+            CORS_ORIGINS=${{ secrets.OCORS_ORIGINS }}
             AI_API_URL=${{ secrets.AI_API_URL }}
             AI_API_MODEL=${{ secrets.AI_API_MODEL }}
             TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
