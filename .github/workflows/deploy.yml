@@ -1,0 +1,208 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  postman-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create .env file for testing
+        run: |
+          echo "=== Creating .env file for testing ==="
+          cat > .env <<EOF
+          # Test environment variables
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASS=${{ secrets.DB_PASS }}
+          DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          OPENROUTER_KEY=${{ secrets.OPENROUTER_KEY }}
+          CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}
+          AI_API_URL=${{ secrets.AI_API_URL }}
+          AI_API_MODEL=${{ secrets.AI_API_MODEL }}
+          
+          EOF
+          
+          echo "Created .env file with contents:"
+          cat .env
+
+      - name: Start services for testing
+        run: |
+          echo "=== Starting test environment ==="
+          
+          echo "Building and starting services..."
+          docker compose up -d --build
+          
+          echo "Waiting for services to be ready..."
+          
+          # Ждем MySQL
+          echo "Waiting for MySQL..."
+          for i in {1..30}; do
+            if docker compose exec db mysqladmin ping -h localhost --silent 2>/dev/null; then
+              echo "✅ MySQL is ready"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "❌ MySQL failed to start"
+              docker compose logs quiz_mysql
+              exit 1
+            fi
+            sleep 2
+          done
+          
+          # Ждем приложение
+            echo "Waiting for application..."
+            for i in {1..5}; do
+            echo "Attempt $i/5..."
+          
+            RESPONSE=$(docker run --rm \
+              --network java_quiz_app_quiz_net \
+              curlimages/curl \
+              -i http://backend:8080/api/health || echo "ERROR")
+          
+            if echo "$RESPONSE" | grep -q "Java Quiz App is running"; then
+              echo "✅ Application is ready (health check passed)"
+              break
+            fi
+          
+            # Если это последняя попытка
+            if [ $i -eq 5 ]; then
+              echo "❌ Application failed to start after 5 attempts"
+              exit 1
+            fi
+          
+            sleep 3  # Ждем 3 секунд перед следующей попыткой
+          done
+          
+          
+          echo "Services are ready!"
+          docker compose ps
+
+      - name: Setup Newman
+        run: |
+          echo "Installing Newman..."
+          npm install -g newman newman-reporter-htmlextra
+
+      - name: Run Postman tests via container
+        run: |
+          echo "=== Running Postman tests from container ==="
+          
+          # Создаем временную сеть для изоляции
+          docker network create test-net 2>/dev/null || true
+          docker network connect test-net quiz_backend
+          
+          # Запускаем Newman в контейнере
+          docker run --rm \
+          --network test-net \
+          -v $(pwd):/etc/newman \
+          -w /etc/newman \
+          postman/newman:alpine \
+          run "postmanTests.json" \
+          --env-var "base_url=http://quiz_backend:8080" \
+          --reporters cli,json \
+          --reporter-json-export newman-report.json
+          
+          # Проверяем результат
+          if [ $? -eq 0 ]; then
+          echo "✅ All tests passed"
+          else
+          echo "❌ Some tests failed"
+          cat newman-report.json | jq '.run.stats' || true
+          exit 1
+          fi
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: postman-test-report
+            path: newman-report.json
+
+      - name: Cleanup test environment
+        if: always()
+        run: |
+          echo "Cleaning up test environment..."
+           docker compose down -v
+           docker network rm test-net 2>/dev/null || true
+           rm -f .env newman-report.json     
+
+  build:
+    needs: postman-tests
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker Compose build
+        run: docker compose build
+
+      - name: Copy .env on server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.HOST_PORT }}
+          script: |
+            cd ~/java_quiz_app
+            cat > .env <<EOF
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASS=${{ secrets.DB_PASS }}
+            DB_ROOT_PASS=${{ secrets.DB_ROOT_PASS }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            OPENROUTER_KEY=${{ secrets.OPENROUTER_KEY }}
+            CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}
+            AI_API_URL=${{ secrets.AI_API_URL }}
+            AI_API_MODEL=${{ secrets.AI_API_MODEL }}
+            TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}
+            TELEGRAM_CHAT=${{ secrets.TELEGRAM_CHAT }}
+            BASE_URL=${{ secrets.BASE_URL }}
+            EOF
+
+      - name: Deploy main stack
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.HOST_PORT }}
+          script: |
+            cd ~/java_quiz_app
+            git pull origin main
+            docker compose pull
+            docker compose down --remove-orphans
+            docker compose up -d --build
+
+      - name: Deploy monitoring stack
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.HOST_PORT }}
+          script: |
+            cd ~/java_quiz_app
+            # Сначала убедитесь, что сеть существует
+            docker network inspect java_quiz_app_quiz_net || docker network create java_quiz_app_quiz_net
+            # Затем запускайте мониторинг
+            cd monitoring
+            docker compose down --remove-orphans
+            docker compose up -d --build

@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  gatus:
+    image: twinproduction/gatus:v5.8.0
+    container_name: gatus
+    # command: ["--config", "/config/config.yml"]  # Важно!
+    networks:
+      - quiz_net
+    env_file: ../.env
+    environment:
+      - GATUS_CONFIG_PATH=./config/config.yml
+    volumes:
+      - ./config.yml:/config/config.yml
+    ports:
+      - 127.0.0.1:8085:8080
+    restart: unless-stopped
+
+networks:
+  quiz_net:
+    external: true
+    name: java_quiz_app_quiz_net

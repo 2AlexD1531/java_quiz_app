@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Java Quiz App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <!-- Экран выбора типа входа -->
+    <div id="welcome" class="screen active">
+        <header>
+            <h1>🎯 Java Quiz App</h1>
+            <p>Добро пожаловать!!!!!!</p>
+        </header>
+
+        <div class="menu">
+            <button onclick="showScreen('login')" class="btn btn-primary">
+                👤 Вход для пользователя
+            </button>
+            <button onclick="showScreen('adminLogin')" class="btn btn-danger">
+                🔐 Вход для администратора
+            </button>
+            <button onclick="showScreen('register')" class="btn btn-secondary">
+                📝 Регистрация
+            </button>
+        </div>
+    </div>
+
+    <!-- Экран входа для пользователя -->
+    <div id="login" class="screen">
+        <header>
+            <h1>🎯 Java Quiz App</h1>
+            <p>Вход в систему</p>
+        </header>
+
+        <div class="form-group">
+            <label for="loginUsername">Введите email:</label>
+            <input type="text" id="loginUsername" placeholder="Введите email" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="loginPassword">Пароль:</label>
+            <input type="password" id="loginPassword" placeholder="Введите пароль" class="form-input">
+        </div>
+
+        <button onclick="login()" class="btn btn-primary">Войти</button>
+        <button onclick="showScreen('register')" class="btn btn-secondary">Регистрация</button>
+        <button onclick="showScreen('welcome')" class="btn-back">← Назад</button>
+    </div>
+
+    <!-- Экран входа для администратора -->
+    <div id="adminLogin" class="screen">
+        <header>
+            <h1>🔐 Java Quiz App</h1>
+            <p>Вход для администратора</p>
+        </header>
+
+        <div class="admin-warning">
+            ⚠️ Доступ только для авторизованного администратора
+        </div>
+
+        <div class="form-group">
+            <label for="adminUsername">Имя пользователя администратора:</label>
+            <input type="text" id="adminUsername" placeholder="Введите имя администратора" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="adminPassword">Пароль администратора:</label>
+            <input type="password" id="adminPassword" placeholder="Введите пароль администратора" class="form-input">
+        </div>
+
+        <button onclick="adminLogin()" class="btn btn-danger">Войти как администратор</button>
+        <button onclick="showScreen('welcome')" class="btn-back">← Назад</button>
+    </div>
+
+    <!-- Экран регистрации -->
+    <div id="register" class="screen">
+        <header>
+            <h1>🎯 Java Quiz App</h1>
+            <p>Регистрация</p>
+        </header>
+
+        <div class="form-group">
+            <label for="regUsername">Имя пользователя:</label>
+            <input type="text" id="regUsername" placeholder="Введите имя пользователя" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="regEmail">Email:</label>
+            <input type="email" id="regEmail" placeholder="Введите email" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="regPassword">Пароль:</label>
+            <input type="password" id="regPassword" placeholder="Введите пароль" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="regConfirmPassword">Подтвердите пароль:</label>
+            <input type="password" id="regConfirmPassword" placeholder="Подтвердите пароль" class="form-input">
+        </div>
+
+        <button onclick="register()" class="btn btn-primary">Зарегистрироваться</button>
+        <button onclick="showScreen('welcome')" class="btn-back">← Назад</button>
+    </div>
+
+    <!-- Главное меню пользователя -->
+    <div id="mainMenu" class="screen">
+        <header>
+            <h1>🎯 Java Quiz App</h1>
+            <p>Добро пожаловать, <span id="userGreeting">Пользователь</span>!</p>
+            <button onclick="logout()" class="btn btn-danger" style="float: right; transform: scale(0.8);">
+                Выйти
+            </button>
+        </header>
+
+        <div class="menu">
+            <button onclick="showScreen('generateQuiz')" class="btn btn-primary">
+                🚀 Пройти новый тест
+            </button>
+            <button onclick="showScreen('savedQuizzes')" class="btn btn-secondary">
+                📚 История тестов
+            </button>
+            <button onclick="viewDetailedResults()" class="btn btn-info">
+                📊 Результаты последнего теста
+            </button>
+            <button onclick="logout()" class="btn btn-danger">
+                ❌ Выход
+            </button>
+        </div>
+    </div>
+
+    <!-- Главное меню администратора -->
+    <div id="adminMainMenu" class="screen">
+        <header>
+            <h1>🔐 Java Quiz App</h1>
+            <p>Панель администратора, <span id="adminGreeting">Администратор</span>!</p>
+            <button onclick="adminLogout()" class="btn btn-danger" style="float: right; transform: scale(0.8);">
+                Выйти
+            </button>
+        </header>
+
+        <div class="menu">
+            <button onclick="showScreen('adminPanel')" class="btn btn-danger">
+                👥 Управление пользователями
+            </button>
+            <button onclick="showScreen('adminQuizzes')" class="btn btn-warning">
+                📊 Управление тестами
+            </button>
+            <button onclick="showScreen('adminStats')" class="btn btn-info">
+                📈 Статистика системы
+            </button>
+            <button onclick="switchToUserMode()" class="btn btn-secondary">
+                👤 Перейти в режим пользователя
+            </button>
+            <button onclick="exitApp()" class="btn btn-danger">
+                ❌ Выход
+            </button>
+        </div>
+    </div>
+
+    <!-- Остальные экраны (generateQuiz, savedQuizzes, quizRunner, quizResults, detailedResults) остаются без изменений -->
+    <div id="generateQuiz" class="screen">
+        <header>
+            <h2>📝 Создание теста</h2>
+            <button onclick="goBackBasedOnRole()" class="btn-back">← Назад</button>
+        </header>
+
+        <div class="form-group">
+            <label for="difficulty">Уровень сложности:</label>
+            <input type="text" id="difficulty" placeholder="Junior, Middle, Senior" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="topics">Темы для теста (через запятую):</label>
+            <input type="text" id="topics" placeholder="Java, Spring, Hibernate" class="form-input">
+        </div>
+
+        <div class="form-group">
+            <label for="questionCount">Количество вопросов:</label>
+            <input type="number" id="questionCount" value="5" min="1" max="20" class="form-input">
+        </div>
+
+        <button onclick="generateQuiz()" class="btn btn-primary">Сгенерировать тест</button>
+    </div>
+
+    <!-- Список сохраненных тестов -->
+    <div id="savedQuizzes" class="screen">
+        <header>
+            <h2>📚 Сохраненные тесты</h2>
+            <button onclick="goBackBasedOnRole()" class="btn-back">← Назад</button>
+        </header>
+
+        <div id="quizzesList" class="quizzes-container">
+            <div class="loading">Загрузка тестов...</div>
+        </div>
+    </div>
+
+    <!-- Прохождение теста -->
+    <div id="quizRunner" class="screen">
+        <header>
+            <h2 id="quizTitle">Тест</h2>
+            <button onclick="goBackBasedOnRole()" class="btn-back" style="float: right">Назад</button>
+            <div class="quiz-progress">
+                Вопрос <span id="currentQuestion">1</span> из <span id="totalQuestions">0</span>
+            </div>
+        </header>
+
+        <div class="question-container">
+            <h3 id="questionText">Загрузка вопроса...</h3>
+            <div id="optionsContainer" class="options-container"></div>
+        </div>
+
+        <div class="quiz-controls">
+            <button onclick="previousQuestion()" id="prevBtn" class="btn btn-secondary" disabled>← Назад</button>
+            <button onclick="nextQuestion()" id="nextBtn" class="btn btn-primary">Далее →</button>
+            <button onclick="finishQuiz()" id="finishBtn" class="btn btn-success" style="display: none;">Завершить тест</button>
+        </div>
+    </div>
+
+    <!-- Результаты теста -->
+    <div id="quizResults" class="screen">
+        <header>
+            <h2>📊 Результаты теста</h2>
+            <button onclick="goBackBasedOnRole()" class="btn-back">← Назад</button>
+        </header>
+
+        <div id="resultsContent"></div>
+        <button onclick="viewDetailedResults()" class="btn btn-info">📖 Детальные результаты</button>
+    </div>
+
+    <!-- Детальные результаты -->
+    <div id="detailedResults" class="screen">
+        <header>
+            <h2>📖 Детальные результаты</h2>
+            <button onclick="showScreen('quizResults')" class="btn-back">← Назад к результатам</button>
+        </header>
+
+        <div id="detailedContent"></div>
+    </div>
+
+    <!-- Админка -->
+    <div id="adminPanel" class="screen">
+        <header>
+            <h2>👥 Управление пользователями</h2>
+            <button onclick="showScreen('adminMainMenu')" class="btn-back">← Назад в панель</button>
+        </header>
+
+        <div class="admin-actions">
+            <button onclick="showUsers()" class="btn btn-danger">
+                📋 Список всех пользователей
+            </button>
+            <button onclick="showCreateUserForm()" class="btn btn-success">
+                ➕ Создать нового пользователя
+            </button>
+        </div>
+
+        <div id="adminContent"></div>
+    </div>
+
+    <!-- Экран пользователей для админа -->
+    <div id="usersScreen" class="screen">
+        <header>
+            <h2>📋 Управление пользователями</h2>
+            <button onclick="showScreen('adminPanel')" class="btn-back">← Назад</button>
+        </header>
+
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>Всего пользователей</h3>
+                <span id="totalUsers">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Администраторов</h3>
+                <span id="adminUsers">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Обычных пользователей</h3>
+                <span id="regularUsers">0</span>
+            </div>
+        </div>
+
+        <div id="usersList" class="users-container">
+            <div class="loading">Загрузка пользователей...</div>
+        </div>
+    </div>
+
+    <!-- Другие админские экраны можно добавить позже -->
+    <div id="adminQuizzes" class="screen">
+        <header>
+            <h2>📊 Управление тестами</h2>
+            <button onclick="showScreen('adminMainMenu')" class="btn-back">← Назад в панель</button>
+        </header>
+        <div class="admin-content">
+            <p>Здесь будет управление всеми тестами системы...</p>
+        </div>
+    </div>
+
+    <div id="adminStats" class="screen">
+        <header>
+            <h2>📈 Статистика системы</h2>
+            <button onclick="showScreen('adminMainMenu')" class="btn-back">← Назад в панель</button>
+        </header>
+        <div class="admin-content">
+            <p>Здесь будет статистика системы...</p>
+        </div>
+    </div>
+</div>
+
+<script src="api.js"></script>
+<script src="app.js"></script>
+
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Генерируем тест...</div>
+</div>
+
+</body>
+</html>

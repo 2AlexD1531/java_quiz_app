@@ -1,0 +1,467 @@
+{
+  "info": {
+    "name": "Quiz-App-API-Tests",
+    "description": "Полный набор тестов для Quiz App API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "📊 Health Check",
+      "item": [
+        {
+          "name": "Health Check API",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Проверка доступности API"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Регистрация нового пользователя"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Авторизация пользователя"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User (Unauthenticated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Попытка получить текущего пользователя без токена"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User (Authenticated)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Получение данных текущего пользователя с токеном"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🧪 Quizzes Management",
+      "item": [
+        {
+          "name": "Generate Quiz",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"tags\": [\"java\", \"spring\"],\n    \"difficulty\": \"medium\",\n    \"questionCount\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/quizzes/generate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "quizzes", "generate"]
+            },
+            "description": "Генерация нового теста"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Quizzes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/quizzes/all-quizzes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "quizzes", "all-quizzes"]
+            },
+            "description": "Получение всех тестов"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Quiz by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/quizzes/{{quiz_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "quizzes", "{{quiz_id}}"]
+            },
+            "description": "Получение конкретного теста по ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit AI Quiz",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"quizData\": {\n        \"questions\": [\n            {\n                \"id\": 1,\n                \"text\": \"What is Java?\",\n                \"options\": [\"Language\", \"Coffee\", \"Island\", \"Car\"],\n                \"correctAnswer\": \"A\",\n                \"explanation\": \"Java is a programming language\"\n            }\n        ]\n    },\n    \"answers\": {\n        \"1\": \"A\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/quizzes/ai-submit",
+              "host": ["{{base_url}}"],
+              "path": ["api", "quizzes", "ai-submit"]
+            },
+            "description": "Отправка ответов на AI-генерированный тест"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Quiz",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/quizzes/delete-quiz/{{quiz_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "quizzes", "delete-quiz", "{{quiz_id}}"]
+            },
+            "description": "Удаление теста"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👨‍💼 Admin Panel",
+      "item": [
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/all-users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "all-users"]
+            },
+            "description": "Получение всех пользователей (только для админов)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/user/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "user", "{{user_id}}"]
+            },
+            "description": "Получение пользователя по ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"role\": \"ROLE_ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/user/{{user_id}}/role",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "user", "{{user_id}}", "role"]
+            },
+            "description": "Изменение роли пользователя"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/user/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "user", "{{user_id}}"]
+            },
+            "description": "Удаление пользователя"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "❓ Questions Management",
+      "item": [
+        {
+          "name": "Get All Questions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/questions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "questions"]
+            },
+            "description": "Получение всех вопросов"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Tags",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/questions/tags",
+              "host": ["{{base_url}}"],
+              "path": ["api", "questions", "tags"]
+            },
+            "description": "Получение всех доступных тегов"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Question",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"What is Spring Boot?\",\n    \"options\": [\"Framework\", \"Library\", \"Tool\", \"Language\"],\n    \"correctAnswer\": \"A\",\n    \"explanation\": \"Spring Boot is a framework\",\n    \"tags\": [\"java\", \"spring\"],\n    \"difficulty\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/questions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "questions"]
+            },
+            "description": "Создание нового вопроса"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Questions Batch",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[{\n    \"text\": \"Question 1\",\n    \"options\": [\"A\", \"B\", \"C\", \"D\"],\n    \"correctAnswer\": \"A\"\n}, {\n    \"text\": \"Question 2\",\n    \"options\": [\"X\", \"Y\", \"Z\"],\n    \"correctAnswer\": \"B\"\n}]"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/questions/batch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "questions", "batch"]
+            },
+            "description": "Массовое создание вопросов"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "console.log('Starting request: ' + pm.request.url);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Общие тесты для всех запросов",
+          "pm.test(\"Response time is less than 2000ms\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});",
+          "",
+          "pm.test(\"Status code is 2xx or 4xx\", function () {",
+          "    const status = pm.response.code;",
+          "    pm.expect(status).to.be.oneOf([200, 201, 204, 400, 401, 403, 404, 500]);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "description": "Токен обычного пользователя"
+    },
+    {
+      "key": "admin_token",
+      "value": "",
+      "description": "Токен администратора"
+    },
+    {
+      "key": "quiz_id",
+      "value": "1"
+    },
+    {
+      "key": "user_id",
+      "value": "1"
+    }
+  ],
+  "auth": null
+}

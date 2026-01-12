@@ -1,0 +1,606 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.logout-btn {
+    margin-left: auto;  /* Современная альтернатива float: right */
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 2px 5px;
+    border-radius: 2px;
+    cursor: pointer;
+     font-size: 10px;       /* Уменьшенный шрифт */
+        margin: 1px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.screen {
+    display: none;
+    padding: 30px;
+}
+
+.screen.active {
+    display: block;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #1e7e34;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #138496;
+}
+
+.btn-back {
+    background: none;
+    border: 1px solid #ddd;
+    color: #666;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.quizzes-container {
+    display: grid;
+    gap: 15px;
+}
+
+.quiz-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.quiz-card:hover {
+    transform: translateX(5px);
+    background: #e9ecef;
+}
+
+.question-container {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.options-container {
+    margin-top: 20px;
+}
+
+.option {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option:hover {
+    border-color: #007bff;
+    background: #f0f8ff;
+}
+
+.option.selected {
+    border-color: #007bff;
+    background: #007bff;
+    color: white;
+}
+
+.quiz-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.results-summary {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.score {
+    font-size: 3em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.question-result {
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.correct {
+    border-left-color: #28a745;
+    background: #f8fff9;
+}
+
+.incorrect {
+    border-left-color: #dc3545;
+    background: #fff8f8;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 10px;
+        border-radius: 10px;
+    }
+
+    .screen {
+        padding: 20px;
+    }
+
+    .quiz-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.quiz-header h3 {
+    margin: 0;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+/* Улучшаем внешний вид карточек тестов */
+.quiz-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.quiz-card:hover {
+    transform: translateX(5px);
+    background: #e9ecef;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Стили для сообщений */
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    border-left: 4px solid #dc3545;
+}
+
+.success {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    border-left: 4px solid #28a745;
+}
+
+/* Анимация удаления */
+.quiz-card.deleting {
+    opacity: 0.5;
+    background: #ffe6e6;
+    transform: scale(0.95);
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    flex-direction: column;
+}
+
+.loading-overlay.active {
+    display: flex;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+}
+
+/* Минимальная анимация для кнопки */
+.btn-loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Стили для админ-панели пользователей */
+.user-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.user-card:hover {
+    transform: translateX(5px);
+    background: #e9ecef;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.user-header h3 {
+    margin: 0;
+    flex: 1;
+    margin-right: 15px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-role {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.btn-role:hover {
+    background: #138496;
+    transform: scale(1.05);
+}
+
+.role-badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.role-badge.admin {
+    background: #dc3545;
+    color: white;
+}
+
+.role-badge.user {
+    background: #28a745;
+    color: white;
+}
+
+.users-container {
+    display: grid;
+    gap: 15px;
+}
+
+#welcome .menu {
+    gap: 20px;
+}
+
+#welcome .btn {
+    text-align: center;
+    justify-content: center;
+    font-size: 18px;
+    padding: 15px 20px;
+}
+
+/* Стили для админского входа */
+#adminLogin {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
+#adminLogin .container {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.admin-warning {
+    background: #ffeaa7;
+    color: #e17055;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-left: 4px solid #fdcb6e;
+    font-weight: bold;
+}
+
+/* Стили для админского меню */
+#adminMainMenu {
+    background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+}
+
+#adminMainMenu .container {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+#adminMainMenu header h1 {
+    color: #2d3436;
+}
+
+#adminMainMenu .btn-danger {
+    background: #e74c3c;
+}
+
+#adminMainMenu .btn-danger:hover {
+    background: #c0392b;
+}
+
+.btn-warning {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #e67e22;
+}
+
+/* Статистика в админке */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #007bff;
+}
+
+.stat-card h3 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.stat-card span {
+    font-size: 2em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Действия в админке */
+.admin-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.admin-actions .btn {
+    text-align: center;
+}
+
+/* Адаптивность для админских экранов */
+@media (max-width: 768px) {
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-actions {
+        flex-direction: column;
+    }
+
+    .admin-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Улучшенные стили для карточек пользователей в админке */
+.user-card.admin-user {
+    border-left-color: #e74c3c;
+    background: #fff5f5;
+}
+
+.user-card.admin-user:hover {
+    background: #ffe6e6;
+}
+
+/* Индикатор режима */
+.mode-indicator {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1000;
+}

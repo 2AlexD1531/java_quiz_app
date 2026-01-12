@@ -1,0 +1,54 @@
+# config.yml
+
+storage:
+  type: memory
+debug: true
+
+endpoints:
+  - name: "Quiz App Frontend"
+    url: "https://demo555.publicvm.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: telegram
+        enabled: true
+        description: "❌ Frontend недоступен"
+        send-on-resolved: true
+
+
+  - name: "Quiz App Backend API"
+    url: "http://backend:8080/api/health"
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: telegram
+        enabled: true
+        description: "❌ Backend API недоступен"
+        send-on-resolved: true
+
+  - name: "MySQL Database"
+    type: tcp
+    url: "tcp://db:3306"
+    interval: 30s
+    conditions:
+      - "[CONNECTED] == true"
+    alerts:
+      - type: telegram
+        enabled: true
+        description: "❌ База данных недоступна"
+        send-on-resolved: true
+
+  # УДАЛИТЕ или ИСПРАВЬТЕ эту проверку:
+  - name: "Nginx Health"
+    url: "https://${BASE_URL}/nginx-health"
+    interval: 30s
+    conditions:
+      - "[STATUS] == 200"
+
+
+alerting:
+  telegram:
+    token: "${TELEGRAM_TOKEN}"
+    id: "${TELEGRAM_CHAT}"
